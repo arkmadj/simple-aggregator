@@ -7,8 +7,8 @@ import {
 } from 'typeorm';
 
 export enum Status {
-  SUCCESS = 'success',
-  FAILED = 'failed',
+  COMPLETED = 'completed',
+  UNCOMPLETED = 'uncompleted',
 }
 
 export enum Currency {
