@@ -43,9 +43,6 @@ export class Transaction {
   @Column({ type: 'float' })
   public sub_total: number;
 
-  @Column({ type: 'timestamp' })
-  transaction_date: Date;
-
   @Column({ type: 'float' })
   public amount_destination: number;
 
