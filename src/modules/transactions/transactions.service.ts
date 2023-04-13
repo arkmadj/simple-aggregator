@@ -5,6 +5,7 @@ import axios, { AxiosInstance } from 'axios';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Transaction } from 'src/entities/transactions.entity';
 import { Repository } from 'typeorm';
+import { RequestDrawdownDto } from './dto/request-drawdown.dto';
 const randomstring = require('randomstring');
 
 @Injectable()
@@ -133,6 +134,26 @@ export class TransactionsService {
         status: error,
         statusCode: 401,
         message: error.message,
+      };
+    }
+  }
+
+  async requestDrawdown(requestDrawdownDto: RequestDrawdownDto) {
+    try {
+      const response = await this.axiosInstance.post(`/draw-downs/customer-partner/${this.customerPartnerId}/request`, {
+        ...requestDrawdownDto
+      });
+
+      return {
+        status: 'success',
+        statusCode: 201,
+        message: response.data.message,
+      }
+    } catch(error) {
+      return {
+        status: 'error',
+        statusCode: error.response ? error.response.status : 500,
+        message: error.response ? error.response.data.message : error.response,
       };
     }
   }
