@@ -95,7 +95,9 @@ export class TransactionsService {
       for (const transaction of createTransactionDto) {
         const amount = Number(
           transaction.amount +
-            (transaction.amount * Number(process.env.MARGIN)).toFixed(2),
+            Number(
+              (transaction.amount * Number(process.env.MARGIN)).toFixed(2),
+            ),
         );
 
         const body = {
@@ -115,6 +117,13 @@ export class TransactionsService {
 
         const transactionData = this.transactionRepository.create(body);
         await this.transactionRepository.save(transactionData);
+
+        return {
+          status: 'success',
+          statusCode: 201,
+          message: 'Transaction has been created successfully.',
+          data: [],
+        };
       }
     } catch (error) {
       return {
