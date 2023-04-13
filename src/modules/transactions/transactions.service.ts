@@ -38,12 +38,15 @@ export class TransactionsService {
         const today = new Date();
         const nextWeek = new Date();
         nextWeek.setDate(nextWeek.getDate() + 7);
+        const destinationAmount =
+          item.amount -
+          Number((item.amount * Number(process.env.MARGIN)).toFixed(2));
         return {
           ...item,
           pin: `NGN${randomString} (TRG)`,
           date: today.toISOString().split('T')[0], // convert to YYYY-MM-DD
           completed_date: nextWeek.toISOString().split('T')[0], // convert to YYYY-MM-DD in a future date
-          amount_destination: item.amount * Number(process.env.CONVERSION_RATE),
+          amount_destination: destinationAmount * Number(process.env.CONVERSION_RATE),
         };
       });
       const transactions = createTransactionDto.map(
