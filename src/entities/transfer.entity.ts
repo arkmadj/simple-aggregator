@@ -34,13 +34,13 @@ export class Transfer {
   @Column({ type: 'float' })
   public amount: number; // desination amount from transaction
 
-  @Column()
+  @Column({ nullable: true })
   public account_name: string; // use this for bank
 
-  @Column()
+  @Column({ nullable: true })
   public account_number: string; // use this for bank
 
-  @Column()
+  @Column({ nullable: true })
   public mobile_no: string; // use this for mobile money
 
   @Column({ type: 'enum', enum: Type })
@@ -52,8 +52,8 @@ export class Transfer {
   @Column()
   public account_provider: string; // mobile correspondent or bank acc. provider
 
-  @Column()
-  public narration: string; // compulsory for mobile money => auto-generate par transaction
+  @Column({ nullable: true })
+  public narration: string;
 
   @CreateDateColumn({
     type: 'timestamp',

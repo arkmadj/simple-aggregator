@@ -1,26 +1,48 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTransferDto } from './dto/create-transfer.dto';
-import { UpdateTransferDto } from './dto/update-transfer.dto';
+import axios, { AxiosInstance } from 'axios';
+import { Transfer } from 'src/entities/transfer.entity';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class TransfersService {
-  create(createTransferDto: CreateTransferDto) {
+  protected readonly axiosInstance: AxiosInstance;
+  protected readonly customerPartnerId: string;
+  constructor(
+    @InjectRepository(Transfer)
+    private readonly transferRepository: Repository<Transfer>,
+  ) {
+    this.axiosInstance = axios.create({
+      baseURL: process.env.B54_API,
+      headers: {
+        Authorization: process.env.B54_API_KEY,
+        'Content-Type': 'application/json',
+      },
+    });
+    this.customerPartnerId = process.env.B54_CUSTOMER_PARTNER_ID;
+  }
+  create(createTransferDto: CreateTransferDto[]) {
     return 'This action adds a new transfer';
   }
 
-  findAll() {
-    return `This action returns all transfers`;
+  async findAll() {
+    return await this.transferRepository.find({});
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} transfer`;
+  async findAllTransactionTransfers(id: number) {
+    return await this.transferRepository.find({
+      where: { transaction_id: id },
+    });
   }
 
-  update(id: number, updateTransferDto: UpdateTransferDto) {
-    return `This action updates a #${id} transfer`;
+  async findOne(id: number) {
+    return await this.transferRepository.find({
+      where: { id },
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} transfer`;
+  async remove(id: number) {
+    return await this.transferRepository.delete(id);
   }
 }
