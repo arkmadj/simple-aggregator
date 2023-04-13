@@ -56,7 +56,7 @@ export class Transaction {
   public paid_by: string;
 
   @Column({ type: 'text', default: 'no' })
-  public amount_settled: string;
+  public watchlist_comment: string;
 
   @CreateDateColumn({
     type: 'timestamp',

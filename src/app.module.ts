@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { TypeOrmConfigService } from './shared/typeorm/typeorm.service';
 import { TransactionsModule } from './modules/transactions/transactions.module';
 import { SettlementsModule } from './modules/settlements/settlements.module';
+import { TransfersModule } from './modules/transfers/transfers.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { SettlementsModule } from './modules/settlements/settlements.module';
     TypeOrmModule.forRootAsync({ useClass: TypeOrmConfigService }),
     TransactionsModule,
     SettlementsModule,
+    TransfersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
