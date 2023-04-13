@@ -94,7 +94,6 @@ export class TransactionsService {
         );
       }
 
-      // This is not completed
       for (const transaction of createTransactionDto) {
         const amount = Number(
           transaction.amount +
