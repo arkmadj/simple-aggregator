@@ -1,9 +1,20 @@
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
+export enum Status {
+  COMPLETED = 'completed',
+  UNCOMPLETED = 'uncompleted',
+}
+
+export enum Currency {
+  USD = 'usd',
+  NGN = 'ngn',
+  GBP = 'gbp',
+}
+
 export class CreateTransactionDto {
   @IsString()
   @IsNotEmpty()
-  settlement_currency: string;
+  settlement_currency: Currency;
 
   @IsNumber()
   @IsNotEmpty()
@@ -15,7 +26,7 @@ export class CreateTransactionDto {
 
   @IsString()
   @IsNotEmpty()
-  status: string;
+  status: Status;
 
   @IsString()
   @IsNotEmpty()
