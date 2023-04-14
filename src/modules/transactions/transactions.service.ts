@@ -47,7 +47,8 @@ export class TransactionsService {
           pin: `NGN${randomString} (TRG)`,
           date: today.toISOString().split('T')[0], // convert to YYYY-MM-DD
           completed_date: nextWeek.toISOString().split('T')[0], // convert to YYYY-MM-DD in a future date
-          amount_destination: destinationAmount * Number(process.env.CONVERSION_RATE),
+          amount_destination:
+            destinationAmount * Number(process.env.CONVERSION_RATE),
         };
       });
       const transactions = createTransactionDto.map(
@@ -139,16 +140,19 @@ export class TransactionsService {
 
   async requestDrawdown(requestDrawdownDto: RequestDrawdownDto) {
     try {
-      const response = await this.axiosInstance.post(`/draw-downs/customer-partner/${this.customerPartnerId}/request`, {
-        ...requestDrawdownDto
-      });
+      const response = await this.axiosInstance.post(
+        `/draw-downs/customer-partner/${this.customerPartnerId}/request`,
+        {
+          ...requestDrawdownDto,
+        },
+      );
 
       return {
         status: 'success',
         statusCode: 201,
         message: response.data.message,
-      }
-    } catch(error) {
+      };
+    } catch (error) {
       return {
         status: 'error',
         statusCode: error.response ? error.response.status : 500,
