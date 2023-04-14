@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateTransferDto } from './dto/create-transfer.dto';
 import axios, { AxiosInstance } from 'axios';
 import { Transfer } from 'src/entities/transfer.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Status } from 'src/entities/transfer.entity';
 
 @Injectable()
 export class TransfersService {
@@ -22,8 +23,60 @@ export class TransfersService {
     });
     this.customerPartnerId = process.env.B54_CUSTOMER_PARTNER_ID;
   }
-  create(createTransferDto: CreateTransferDto[]) {
-    return 'This action adds a new transfer';
+  async create(createTransferDto: CreateTransferDto[]) {
+    try {
+      for (const transfer of createTransferDto) {
+        let _transfer = {};
+        if (transfer.type === 'bank') {
+          _transfer = {
+            name: transfer.account_name,
+            amount: transfer.amount,
+            account_type: transfer.type,
+            mobile_no: transfer.mobile_no ?? null,
+            account_number: transfer.account_number,
+            bank_code: transfer.account_provider,
+          };
+        } else {
+          _transfer = {
+            amount: transfer.amount,
+            account_type: transfer.type,
+            mobile_no: transfer.mobile_no,
+            correspondent: transfer.account_provider,
+            narration: transfer.narration ?? null,
+          };
+        }
+        const response = await this.axiosInstance.post(
+          `baas/customer-partner/${this.customerPartnerId}/withdraw`,
+          _transfer,
+        );
+
+        if (response.data.status !== 'success') {
+          throw new HttpException(
+            'unable to make payment',
+            HttpStatus.INTERNAL_SERVER_ERROR,
+          );
+        }
+
+        const transferData = this.transferRepository.create({
+          status: Status.PROCESSING,
+          ...transfer,
+        });
+        await this.transferRepository.save(transferData);
+      }
+
+      return {
+        status: 'success',
+        statusCode: 201,
+        message: 'Transfer has been created successfully.',
+        data: [],
+      };
+    } catch (error) {
+      return {
+        status: error,
+        statusCode: error.status,
+        message: error.message,
+      };
+    }
   }
 
   async findAll() {

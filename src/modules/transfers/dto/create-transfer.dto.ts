@@ -8,7 +8,7 @@ export enum Type {
 export class CreateTransferDto {
   @IsString()
   @IsNotEmpty()
-  transaction_id: string;
+  transaction_id: number;
 
   @IsNumber()
   @IsNotEmpty()

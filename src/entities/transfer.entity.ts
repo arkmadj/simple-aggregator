@@ -12,6 +12,7 @@ import { Transaction } from './transactions.entity';
 export enum Status {
   FAILED = 'failed',
   SUCCESS = 'success',
+  PROCESSING = 'processing',
 }
 
 export enum Type {
