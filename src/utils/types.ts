@@ -9,6 +9,11 @@ export enum Currency {
   GBP = 'gbp',
 }
 
+export enum Type {
+  MOBILE = 'mobile-money',
+  BANK = 'bank',
+}
+
 export class CreateTransactionType {
   settlement_currency: Currency;
   amount: number;
